@@ -2258,6 +2258,7 @@ gtk_image_view_load_image_contents (GTask        *task,
   if (error)
     {
       /* in_stream is NULL */
+      g_object_unref (file);
       g_task_return_error (task, error);
       return;
     }
@@ -2273,6 +2274,8 @@ gtk_image_view_load_image_contents (GTask        *task,
     g_task_return_error (task, error);
   else
     g_task_return_boolean (task, TRUE);
+
+  g_object_unref (file);
 }
 
 static void
@@ -2330,6 +2333,7 @@ gtk_image_view_load_from_file_async (GtkImageView        *image_view,
   task_data = g_slice_new (LoadTaskData);
   task_data->scale_factor = scale_factor;
   task_data->source = file;
+  g_object_ref (file);
 
   task = g_task_new (image_view, cancellable, callback, user_data);
   g_task_set_task_data (task, task_data, (GDestroyNotify)free_load_task_data);
