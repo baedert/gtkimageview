@@ -105,6 +105,7 @@ main (int argc, char **argv)
 
   gtk_container_add (GTK_CONTAINER (window), box);
 
+  g_signal_connect (window, "delete-event", gtk_main_quit, NULL);
   gtk_window_set_default_size (GTK_WINDOW (window), 500, 500);
   gtk_widget_show_all (window);
   gtk_main ();
