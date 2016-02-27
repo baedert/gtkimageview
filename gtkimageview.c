@@ -2212,7 +2212,6 @@ gtk_image_view_replace_animation (GtkImageView       *image_view,
     }
   else
     {
-      g_message ("updating surface..");
       gtk_image_view_update_surface (image_view,
                                      gdk_pixbuf_animation_get_static_image (animation),
                                      scale_factor);

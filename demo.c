@@ -6,6 +6,7 @@ GtkWidget *stack;
 GtkWidget *image_view;
 GtkWidget *spinner;
 GtkWidget *scrolled_window;
+GtkWidget *angle_scale;
 
 
 
@@ -47,6 +48,13 @@ file_set_cb (GtkFileChooserButton *button)
                                        NULL);
 }
 
+static void
+reset_button_clicked_cb ()
+{
+  gtk_image_view_set_scale (GTK_IMAGE_VIEW (image_view), 1.0);
+  gtk_image_view_set_angle (GTK_IMAGE_VIEW (image_view), 0.0);
+}
+
 
 void
 main (int argc, char **argv)
@@ -54,7 +62,11 @@ main (int argc, char **argv)
   gtk_init (&argc, &argv);
   GtkWidget *window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   GtkWidget *box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
+  GtkWidget *bottom_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  GtkWidget *top_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   GtkWidget *file_chooser = gtk_file_chooser_button_new ("Choose image", GTK_FILE_CHOOSER_ACTION_OPEN);
+  GtkWidget *reset_button = gtk_button_new_with_label ("Reset");
+  GtkAdjustment *angle_adjustment = gtk_adjustment_new (1, 0, 360, 1, 10, 0);
 
   g_signal_connect (G_OBJECT (file_chooser), "file-set",
                     G_CALLBACK (file_set_cb), NULL);
@@ -63,6 +75,7 @@ main (int argc, char **argv)
   image_view = gtk_image_view_new ();
   stack = gtk_stack_new ();
   spinner = gtk_spinner_new ();
+  angle_scale = gtk_scale_new (GTK_ORIENTATION_VERTICAL, angle_adjustment);
 
 
   gtk_widget_set_vexpand (image_view, TRUE);
@@ -74,8 +87,22 @@ main (int argc, char **argv)
 
   gtk_stack_set_visible_child (GTK_STACK (stack), scrolled_window);
 
-  gtk_container_add (GTK_CONTAINER (box), stack);
-  gtk_container_add (GTK_CONTAINER (box), file_chooser);
+  g_signal_connect (G_OBJECT (reset_button), "clicked", G_CALLBACK (reset_button_clicked_cb), NULL);
+
+  gtk_widget_set_hexpand (file_chooser, TRUE);
+  gtk_container_add (GTK_CONTAINER (bottom_box), file_chooser);
+  gtk_container_add (GTK_CONTAINER (bottom_box), reset_button);
+
+
+  g_object_bind_property (angle_adjustment, "value", image_view, "angle", G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
+
+
+  gtk_container_add (GTK_CONTAINER (top_box), stack);
+  gtk_container_add (GTK_CONTAINER (top_box), angle_scale);
+
+  gtk_container_add (GTK_CONTAINER (box), top_box);
+  gtk_container_add (GTK_CONTAINER (box), bottom_box);
+
   gtk_container_add (GTK_CONTAINER (window), box);
 
   gtk_window_set_default_size (GTK_WINDOW (window), 500, 500);
