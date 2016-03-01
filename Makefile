@@ -14,7 +14,7 @@ vala_demo.o: vala_demo.c gtkimageview.vapi
 	$(CC) $(CFLAGS) -c vala_demo.c
 
 vala_demo.c: vala_demo.vala
-	valac --pkg gtk+-3.0 gtkimageview.vapi vala_demo.vala -C
+	valac --pkg gtk+-3.0 gtkimageview.vapi vala_demo.vala -C -g
 
 
 gtkimageview.o: gtkimageview.c gtkimageview.h
