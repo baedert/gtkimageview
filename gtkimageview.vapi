@@ -23,8 +23,8 @@ namespace Gtk {
                                             int scale_factor,
                                             GLib.Cancellable? cancellable = null) throws GLib.Error;
 
-    public void set_animation (Gdk.PixbufAnimation animation);
-    public void set_pixbuf (Gdk.Pixbuf pixbuf);
+    public void set_animation (Gdk.PixbufAnimation animation, int scale_factor);
+    public void set_pixbuf (Gdk.Pixbuf pixbuf, int scale_factor);
     public void set_surface (Cairo.Surface? surface);
   }
 }
