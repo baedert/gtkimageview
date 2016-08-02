@@ -56,7 +56,7 @@ reset_button_clicked_cb ()
 }
 
 
-void
+int
 main (int argc, char **argv)
 {
   gtk_init (&argc, &argv);
@@ -109,4 +109,6 @@ main (int argc, char **argv)
   gtk_window_set_default_size (GTK_WINDOW (window), 500, 500);
   gtk_widget_show_all (window);
   gtk_main ();
+
+  return 0;
 }
